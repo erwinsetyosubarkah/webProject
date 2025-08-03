@@ -18,17 +18,19 @@ RUN apt-get install -y \
     libaio1 \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY oracle/instantclient-basic-linux.x64-12.2.0.1.0.zip /tmp/
-COPY oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip /tmp/
+COPY oracle/instantclient-basic-linux.x64-11.2.0.4.0.zip /tmp/
+COPY oracle/instantclient-sdk-linux.x64-11.2.0.4.0.zip /tmp/
 
 
 
 
 # Ekstrak Oracle Instant Client
-RUN unzip /tmp/instantclient-basic-linux.x64-12.2.0.1.0.zip -d /opt/oracle && \
-    unzip /tmp/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle && \
-    ln -s /opt/oracle/instantclient_12_2 /opt/oracle/instantclient && \
-ln -s /opt/oracle/instantclient/libclntsh.so.12.1 /opt/oracle/instantclient/libclntsh.so
+RUN unzip /tmp/instantclient-basic-linux.x64-11.2.0.4.0.zip -d /opt/oracle && \
+    unzip /tmp/instantclient-sdk-linux.x64-11.2.0.4.0.zip -d /opt/oracle && \
+    ln -s /opt/oracle/instantclient_11_2 /opt/oracle/instantclient && \
+	ln -s /opt/oracle/instantclient/libclntsh.so.11.1 /opt/oracle/instantclient/libclntsh.so && \
+	ln -s /opt/oracle/instantclient/libocci.so.11.1 /opt/oracle/instantclient/libocci.so && \
+	ln -s /opt/oracle/instantclient/ /opt/oracle/instantclient/lib
 
 RUN echo /opt/oracle/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf
 RUN ldconfig
@@ -84,7 +86,7 @@ RUN docker-php-ext-install -j$(nproc) xsl
 
 RUN docker-php-ext-install mcrypt
 	
-RUN echo "instantclient,/opt/oracle/instantclient" | pecl install pdo_oci \
- && docker-php-ext-enable pdo_oci
+RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient,11.2 \
+    && docker-php-ext-install pdo_oci
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
