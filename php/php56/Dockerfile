@@ -82,10 +82,7 @@ RUN docker-php-ext-install -j$(nproc) pgsql
 RUN docker-php-ext-install -j$(nproc) xsl 
 
 
-# Install mcrypt (from pecl for PHP 5.6)
-RUN pecl install mcrypt-1.0.1 \
-    && docker-php-ext-enable mcrypt
-	# install pdo_oci via PECL
+RUN docker-php-ext-install mcrypt
 	
 RUN echo "instantclient,/opt/oracle/instantclient" | pecl install pdo_oci \
  && docker-php-ext-enable pdo_oci
