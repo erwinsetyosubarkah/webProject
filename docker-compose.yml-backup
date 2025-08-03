@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: 
+        context: ./nginx  # Specifies the build context (where to find the Dockerfile)
+        dockerfile: Dockerfile # Specifies the name of the Dockerfile (optional if named Dockerfile)
+    container_name: nginx
+    ports:
+      - "80:80"   # host:container
+    extra_hosts:
+      - "pegawai-baru.test:127.0.0.1"
+      - "www.pegawai-baru.test:127.0.0.1"
+    volumes:
+      - ./nginx/html:/var/www/pegawai-baru:ro  # Optional: mount folder html dari lokal
+    networks:
+      - app-net
+      
+  php56:
+    build:
+      context: ./php/php56
+      dockerfile: Dockerfile
+    container_name: php56
+    ports:
+      - "9056:9056"   # host:container
+    volumes:
+      - ./nginx/html:/var/www/pegawai-baru:ro  # Optional: mount folder html dari lokal
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
+    
+
