@@ -88,5 +88,14 @@ RUN docker-php-ext-install mcrypt
 	
 RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient,11.2 \
     && docker-php-ext-install pdo_oci
+    
+# Install timezone data
+RUN apt-get install -y tzdata
+
+# Set timezone OS
+ENV TZ=Asia/Jakarta
+
+# Set timezone untuk PHP
+RUN echo "date.timezone=Asia/Jakarta" > /usr/local/etc/php/conf.d/timezone.ini
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

@@ -9,20 +9,37 @@ services:
     extra_hosts:
       - "pegawai-baru.test:127.0.0.1"
       - "www.pegawai-baru.test:127.0.0.1"
+    environment:
+      - HTTP_PROXY=http://10.15.3.20:80
+      - HTTPS_PROXY=http://10.15.3.20:80
     volumes:
-      - ../pegawai-baru:/var/www/pegawai-baru:ro  # Optional: mount folder html dari lokal
+      - ../pegawai-baru:/var/www/pegawai-baru  # Optional: mount folder html dari lokal
     networks:
       - app-net
+    dns:
+      - 10.15.3.29
+      - 10.15.32.59
+      - 1.1.1.1    # Cloudflare DNS
+      - 8.8.8.8    # Google DNS
       
   php56:
     image: webproject-php56
     container_name: php56
     ports:
       - "9056:9056"   # host:container
+    environment:
+      - TZ=Asia/Jakarta  # Mengatur timezone OS
+      - HTTP_PROXY=http://10.15.3.20:80
+      - HTTPS_PROXY=http://10.15.3.20:80
     volumes:
-      - ../pegawai-baru:/var/www/pegawai-baru:ro  # Optional: mount folder html dari lokal
+      - ../pegawai-baru:/var/www/pegawai-baru  # Optional: mount folder html dari lokal
     networks:
       - app-net
+    dns:
+      - 10.15.3.29
+      - 10.15.32.59
+      - 1.1.1.1    # Cloudflare DNS
+      - 8.8.8.8    # Google DNS
 
 networks:
   app-net:
