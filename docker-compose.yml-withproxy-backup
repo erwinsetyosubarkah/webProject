@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   nginx:
     build: 
@@ -12,7 +10,7 @@ services:
       - "pegawai-baru.test:127.0.0.1"
       - "www.pegawai-baru.test:127.0.0.1"
     volumes:
-      - ./nginx/html:/var/www/pegawai-baru:ro  # Optional: mount folder html dari lokal
+      - ./nginx/html:/var/www/pegawai-baru:z  # Optional: mount folder html dari lokal
     networks:
       - app-net
       
@@ -24,7 +22,8 @@ services:
     ports:
       - "9056:9056"   # host:container
     volumes:
-      - ./nginx/html:/var/www/pegawai-baru:ro  # Optional: mount folder html dari lokal
+      - ./nginx/html:/var/www/pegawai-baru:z  # Optional: mount folder html dari lokal
+      - ./php/php56/php.ini:/usr/local/etc/php/php.ini:z
     networks:
       - app-net
 

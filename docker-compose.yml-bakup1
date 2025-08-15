@@ -34,6 +34,7 @@ services:
       - HTTP_PROXY=http://10.15.3.20:80
       - HTTPS_PROXY=http://10.15.3.20:80
     volumes:
+      - ../pegawai-baru:/var/www/pegawai-baru:z  # Optional: mount folder html dari lokal
       - ./php/php56/php.ini:/usr/local/etc/php/php.ini:z
     networks:
       - app-net
@@ -55,7 +56,8 @@ services:
       - HTTP_PROXY=http://10.15.3.20:80
       - HTTPS_PROXY=http://10.15.3.20:80
     volumes:
-      - ./php/php74/php.ini:/usr/local/etc/php/php.ini:z
+      - ../pegawai-baru:/var/www/pegawai-baru:z  # Optional: mount folder html dari lokal
+      - ./php/php56/php.ini:/usr/local/etc/php/php.ini:z
     networks:
       - app-net
     dns:
