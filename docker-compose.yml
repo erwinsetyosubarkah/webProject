@@ -15,12 +15,14 @@ services:
     volumes:
       - ../pegawai-baru:/var/www/pegawai-baru:z  # Optional: mount folder html dari lokal
     networks:
-      - app-net
+      app-net:
+        ipv4_address: 172.20.0.2
     dns:
       - 10.15.3.29
       - 10.15.32.59
       - 1.1.1.1    # Cloudflare DNS
       - 8.8.8.8    # Google DNS
+
       
   php56:
     build:
@@ -29,14 +31,19 @@ services:
     container_name: php56
     ports:
       - "9056:9056"   # host:container
+    extra_hosts:
+      - "pegawai-baru.test:172.20.0.2"
+      - "www.pegawai-baru.test:172.20.0.2"
     environment:
       - TZ=Asia/Jakarta  # Mengatur timezone OS
       - HTTP_PROXY=http://10.15.3.20:80
       - HTTPS_PROXY=http://10.15.3.20:80
     volumes:
       - ./php/php56/php.ini:/usr/local/etc/php/php.ini:z
+      - ../pegawai-baru:/var/www/pegawai-baru:z  # Optional: mount folder html dari lokal
     networks:
-      - app-net
+      app-net:
+        ipv4_address: 172.20.0.3
     dns:
       - 10.15.3.29
       - 10.15.32.59
@@ -57,15 +64,20 @@ services:
     volumes:
       - ./php/php74/php.ini:/usr/local/etc/php/php.ini:z
     networks:
-      - app-net
+      app-net:
+        ipv4_address: 172.20.0.4
     dns:
       - 10.15.3.29
       - 10.15.32.59
       - 1.1.1.1    # Cloudflare DNS
       - 8.8.8.8    # Google DNS
 
+
 networks:
   app-net:
     driver: bridge
-    
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
 

@@ -117,4 +117,12 @@ ENV TZ=Asia/Jakarta
 # Set timezone untuk PHP
 RUN echo "date.timezone=Asia/Jakarta" > /usr/local/etc/php/conf.d/timezone.ini
 
+# install composer
+RUN wget https://getcomposer.org/download/latest-stable/composer.phar -O /usr/local/bin/composer
+RUN chmod +x /usr/local/bin/composer
+
+# install JDK 8
+RUN mkdir /usr/share/man/man1
+RUN apt install openjdk-8-jdk -y
+
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
